@@ -11,14 +11,14 @@ interface datatype{
 }
 const Dashboard = () => {
     const [data,setData]=useState<[datatype]>();
-    const [password,setPassword]=useState<string>("")
-    const [auth, setAuth] = useState<boolean>(() => {
-        const verified = localStorage.getItem("auth");
-        return verified === "true"; // or whatever truthy string you stored
-      });
-      useEffect(() => {
-        localStorage.setItem("auth", auth.toString());
-      }, [auth]);
+    // const [password,setPassword]=useState<string>("")
+    // const [auth, setAuth] = useState<boolean>(() => {
+    //     const verified = localStorage.getItem("auth");
+    //     return verified === "true"; // or whatever truthy string you stored
+    //   });
+    //   useEffect(() => {
+    //     localStorage.setItem("auth", auth.toString());
+    //   }, [auth]);
     // const handlePassword = async () => {
     //     try {
     //       const response = await axios.post("/api/auth", { password });
