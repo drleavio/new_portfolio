@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import ProjectCard from "@/components/project-card"
 import SkillBadge from "@/components/skill-badge"
-import axios from "axios"
+
 
 export default function Portfolio() {
   const ref = useRef(null)
@@ -52,6 +52,7 @@ export default function Portfolio() {
       subject: "",
       message: "",
     });
+    
   };
   
   
