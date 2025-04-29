@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import { ArrowDown, Code, ExternalLink, Github, Mail, User } from "lucide-react"
 import Link from "next/link"
@@ -11,13 +11,50 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import ProjectCard from "@/components/project-card"
 import SkillBadge from "@/components/skill-badge"
+import axios from "axios"
 
 export default function Portfolio() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
+  const isInView = useInView(ref, { once: false })
   const { scrollYProgress } = useScroll()
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0])
+  const [data,setData]=useState({
+    name:"",
+    email:"",
+    subject:"",
+    message:""
+  })
+  const handleChange=(e:any)=>{
+    const {name,value}=e.target;
+    setData({
+      ...data,
+      [name]:value,
+    })
+  }
 
+  const sendMessage = async (e: any) => {
+    e.preventDefault();
+  
+    const res = await fetch("/api/message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data), // ✅ Convert object to JSON string
+    });
+  
+    const response = await res.json(); // Optional: handle response
+    console.log("Server response:", response);
+  
+    setData({
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
+  };
+  
+  
   // Smooth scroll function
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault()
@@ -366,13 +403,13 @@ export default function Portfolio() {
                   <label htmlFor="name" className="text-sm font-medium">
                     Name
                   </label>
-                  <Input id="name" placeholder="Your name" />
+                  <Input id="name" value={data.name} name="name" placeholder="Your name" onChange={(e)=>handleChange(e)} />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="email" className="text-sm font-medium">
                     Email
                   </label>
-                  <Input id="email" type="email" placeholder="Your email" />
+                  <Input id="email" value={data.email} name="email" type="email" placeholder="Your email" onChange={(e)=>handleChange(e)}/>
                 </div>
               </div>
 
@@ -380,17 +417,17 @@ export default function Portfolio() {
                 <label htmlFor="subject" className="text-sm font-medium">
                   Subject
                 </label>
-                <Input id="subject" placeholder="Subject" />
+                <Input id="subject" value={data.subject} name="subject" placeholder="Subject" onChange={(e)=>handleChange(e)}/>
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="message" className="text-sm font-medium">
                   Message
                 </label>
-                <Textarea id="message" placeholder="Your message" rows={5} />
+                <Textarea id="message" value={data.message} name="message" placeholder="Your message" rows={5} onChange={(e)=>handleChange(e)}/>
               </div>
 
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" onClick={(e)=>sendMessage(e)}>
                 Send Message
               </Button>
             </motion.form>
